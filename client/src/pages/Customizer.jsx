@@ -17,35 +17,14 @@ const Customizer = () => {
 
   const [prompt, setPrompt] = useState('');
   const [generatingImg, setGeneratingImg] = useState(false);
-
+  const [uploadingMesh, setUploadingMesh] = useState(false);
+  const [generatedStlUrl, setGeneratedStlUrl] = useState(null);
+ 
   const [activeEditorTab, setActiveEditorTab] = useState("");
   const [activeFilterTab, setActiveFilterTab] = useState({
     logoShirt: true,
     stylishShirt: false,
   })
-
-  // show tab content depending on the activeTab
-  const generateTabContent = () => {
-    switch (activeEditorTab) {
-      case "colorpicker":
-        return <ColorPicker />
-      case "filepicker":
-        return <FilePicker
-          file={file}
-          setFile={setFile}
-          readFile={readFile}
-        />
-      case "aipicker":
-        return <AIPicker 
-          prompt={prompt}
-          setPrompt={setPrompt}
-          generatingImg={generatingImg}
-          handleSubmit={handleSubmit}
-        />
-      default:
-        return null;
-    }
-  }
 
   const handleSubmit = async (type) => {
     if(!prompt) return alert("Please enter a prompt");
@@ -53,7 +32,7 @@ const Customizer = () => {
     try {
       setGeneratingImg(true);
 
-      const response = await fetch('http://localhost:8080/api/v1/dalle', {
+      const response = await fetch(config.dalleUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -130,55 +109,80 @@ const Customizer = () => {
       })
   }
 
+  const handleImageTo3dUpload = async () => {
+    if (!file) {
+      alert('Please select an image first.');
+      return;
+    }
+
+    const isImage = file.type.startsWith('image/');
+    if (!isImage) {
+      alert('Image → STL requires a PNG or JPEG file.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('image_upload', file);
+
+    setUploadingMesh(true);
+
+    try {
+      const response = await fetch(config.imageTo3dEndpoint, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Failed to generate STL.');
+      }
+
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      state.stlModelUrl = objectUrl;
+      state.useStlModel = true;
+
+      // Track generated STL locally so the FilePicker can expose a
+      // Download STL button. Revoke any previous URL to avoid leaks.
+      if (generatedStlUrl) {
+        URL.revokeObjectURL(generatedStlUrl);
+      }
+      setGeneratedStlUrl(objectUrl);
+
+      setActiveEditorTab('');
+    } catch (error) {
+      console.error(error);
+      alert('Image → STL failed. Please check the backend tunnel and try again.');
+    } finally {
+      setUploadingMesh(false);
+    }
+  }
+
   return (
     <AnimatePresence>
       {!snap.intro && (
         <>
           <motion.div
             key="custom"
-            className="absolute top-0 left-0 z-10"
+            className="z-10 w-full h-full"
             {...slideAnimation('left')}
           >
-            <div className="flex items-center min-h-screen">
-              <div className="editortabs-container tabs">
-                {EditorTabs.map((tab) => (
-                  <Tab 
-                    key={tab.name}
-                    tab={tab}
-                    handleClick={() => setActiveEditorTab(tab.name)}
-                  />
-                ))}
-
-                {generateTabContent()}
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="absolute z-10 top-5 right-5"
-            {...fadeAnimation}
-          >
-            <CustomButton 
-              type="filled"
-              title="Go Back"
-              handleClick={() => state.intro = true}
-              customStyles="w-fit px-4 py-2.5 font-bold text-sm"
-            />
-          </motion.div>
-
-          <motion.div
-            className='filtertabs-container'
-            {...slideAnimation("up")}
-          >
-            {FilterTabs.map((tab) => (
-              <Tab
-                key={tab.name}
-                tab={tab}
-                isFilterTab
-                isActiveTab={activeFilterTab[tab.name]}
-                handleClick={() => handleActiveFilterTab(tab.name)}
+            <div className="w-full h-full">
+              <FilePicker
+                file={file}
+                setFile={(newFile) => {
+                  setFile(newFile);
+                  if (generatedStlUrl) {
+                    URL.revokeObjectURL(generatedStlUrl);
+                    setGeneratedStlUrl(null);
+                  }
+                }}
+                readFile={readFile}
+                uploadImageTo3d={handleImageTo3dUpload}
+                isUploading={uploadingMesh}
+                generatedStlUrl={generatedStlUrl}
               />
-            ))}
+            </div>
           </motion.div>
         </>
       )}

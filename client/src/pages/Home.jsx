@@ -20,8 +20,8 @@ import { CardContainer, CardBody, CardItem } from "@/components/ui/3d-card";
 
 const heroStats = [
   { label: "Avg. STL turnaround", value: "24 hrs" },
-  { label: "Families making toys", value: "12k+" },
-  { label: "Recycled plastic saved", value: "18 tons" },
+  { label: "Families making toys", value: "1k+" },
+  { label: "Recycled plastic saved", value: "3 tons" },
 ];
 
 const ecoHighlights = [
@@ -202,8 +202,8 @@ const Home = () => {
                 />
               </div>
               <p className="max-w-2xl text-base text-neutral-600 sm:text-lg">
-                PichaPrintAI lets kids (and kids at heart) sketch a dream toy and
-                watch AI sculpt a 3D-printable STL in minutes. Celebrate togetherness,
+                PichaPrintAI lets kids at heart sketch a dream toy and
+                watch AI sculpt a 3D-printable model in minutes. Celebrate togetherness,
                 keep plastics in circulation, and surprise loved ones with toys born
                 from their own imagination.
               </p>
@@ -215,13 +215,7 @@ const Home = () => {
                   <IconUpload className="h-5 w-5" />
                   Upload a sketch
                 </button>
-                <a
-                  href="#book-demo"
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-neutral-300 px-6 py-3 text-base font-semibold text-neutral-900 transition hover:border-neutral-900 hover:text-neutral-900"
-                >
-                  <IconCalendarEvent className="h-5 w-5" />
-                  Explore campaign kits
-                </a>
+               
               </div>
               <dl className="grid gap-4 sm:grid-cols-3">
                 {heroStats.map((stat) => (
@@ -247,25 +241,7 @@ const Home = () => {
                     <Canvas />
                   </div>
                   <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-gradient-to-t from-black/10 via-transparent" />
-                  <div className="pointer-events-none absolute inset-x-6 bottom-6 rounded-2xl border border-white/20 bg-white/80 px-4 py-3 shadow-lg backdrop-blur">
-                    <p className="text-sm font-semibold text-neutral-900">
-                      Live toy sculpt
-                    </p>
-                    <p className="text-xs text-neutral-600">
-                      Orbit, zoom, and tweak your AI-generated STL before printing.
-                    </p>
-                    <div className="mt-3 flex gap-2 text-xs font-medium text-neutral-700">
-                      <span className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-700">
-                        Recycled PLA
-                      </span>
-                      <span className="rounded-full bg-neutral-900 px-3 py-1 text-white">
-                        AI sculpt
-                      </span>
-                      <span className="rounded-full border border-neutral-200 px-3 py-1">
-                        3D proof
-                      </span>
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
             </div>
