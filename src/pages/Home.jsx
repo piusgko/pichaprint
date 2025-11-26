@@ -15,7 +15,7 @@ import state from "@/store";
 import { ContainerTextFlip } from "@/components/ui/container-text-flip";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 import { FloatingDock } from "@/components/ui/floating-dock";
-import STLViewer from "@/components/STLViewer";
+
 import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
 import { CardContainer, CardBody, CardItem } from "@/components/ui/3d-card";
 import BookingCard from "@/components/BookingCard";
@@ -74,22 +74,19 @@ const deliveryTimeline = [
 
 const galleryItems = [
   {
-    title: "Apple 3D Model",
-    copy: "A beautifully designed apple model created by our community makers.",
-    src: "/apple+3d+model.stl",
-    color: "#EF4444",
+    title: "Elf figure in festive costume.",
+
+    src: "/1.png",
   },
   {
-    title: "Roblox Character",
-    copy: "Custom Roblox-inspired character model ready for 3D printing.",
-    src: "/roblox v8.stl",
-    color: "#10B981",
+    title: "Cartoon Santa Claus figure.",
+
+    src: "/2.png",
   },
   {
-    title: "Stylized Character",
-    copy: "Unique stylized character design perfect for toy creation.",
-    src: "/stylized+character+3d+model.stl",
-    color: "#3B82F6",
+    title: "Small colorful cartoon house. ",
+
+    src: "/3.png",
   },
 ];
 
@@ -107,20 +104,6 @@ const makerStories = [
     name: "Mr. Pius",
     designation: "5th Grade Teacher",
     src: "https://res.cloudinary.com/dbs7m6ljl/image/upload/v1763666881/IMG_0985_swyi11.jpg",
-  },
-  {
-    quote:
-      "Our classroom recycled old filament spools into stocking stuffers. The lifecycle card turned every fifth grader into a sustainability nerd.",
-    name: "Mr. Pius",
-    designation: "5th Grade Teacher",
-    src: "https://res.cloudinary.com/dbs7m6ljl/image/upload/v1763666881/IMG_0985_swyi11.jpg",
-  },
-  {
-    quote:
-      "I sketched a jellyfish buddy for my niece overseas. The STL preview let us tweak smiles together before it ever shipped.",
-    name: "Clem",
-    designation: "Fave Auntie",
-    src: "https://res.cloudinary.com/dbs7m6ljl/image/upload/v1763666784/IMG_0988_xqyrsb.jpg",
   },
 ];
 
@@ -158,6 +141,14 @@ const Home = () => {
 
   return (
     <div className="relative flex flex-col gap-20 bg-gradient-to-b from-slate-50 to-white pb-32 pt-16">
+      <div className="absolute left-6 top-6 z-50 flex items-center gap-2">
+        <img
+          src="/logo.blob"
+          alt="PichaPrint Logo"
+          className="h-12 w-auto object-contain"
+        />
+        <span className="text-xl font-bold text-neutral-1000">PICHAPRINT</span>
+      </div>
       <div className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center px-4 md:inset-x-auto md:inset-y-0 md:left-6 md:top-1/2 md:bottom-auto md:px-0">
         <div className="pointer-events-auto flex w-full max-w-sm justify-center md:max-w-none md:-translate-y-1/2">
           <FloatingDock
@@ -179,62 +170,62 @@ const Home = () => {
           </div>
         </div>
         <div className="relative z-10 flex flex-col gap-12 lg:flex-row lg:items-center">
-            <div className="flex-1 space-y-8">
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-emerald-500">
-                Create your own toys for Christmas
-              </p>
-              <div className="space-y-4 text-4xl font-semibold leading-tight text-neutral-900 md:text-5xl lg:text-6xl">
-                <p>Holiday toys that feel</p>
-                <ContainerTextFlip
-                  words={["playful", "sustainable", "heartfelt", "limitless"]}
-                  className="bg-white/80 text-neutral-900 dark:text-white"
-                />
-              </div>
-              <p className="max-w-2xl text-base text-neutral-600 sm:text-lg">
-                PichaPrintAI lets kids at heart sketch a dream toy and
-                watch AI sculpt a 3D-printable model in minutes. Celebrate togetherness,
-                keep plastics in circulation, and surprise loved ones with toys born
-                from their own imagination.
-              </p>
-              <div className="flex flex-col gap-4 sm:flex-row">
-                <button
-                  onClick={handleStartCustomization}
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-neutral-900 px-6 py-3 text-base font-semibold text-white transition hover:bg-neutral-800"
-                >
-                  <IconUpload className="h-5 w-5" />
-                  Upload a sketch
-                </button>
-               
-              </div>
-              <dl className="grid gap-4 sm:grid-cols-3">
-                {heroStats.map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="rounded-2xl border border-neutral-200 px-4 py-3 shadow-sm"
-                  >
-                    <dt className="text-xs uppercase tracking-wide text-neutral-500">
-                      {stat.label}
-                    </dt>
-                    <dd className="text-2xl font-semibold text-neutral-900">
-                      {stat.value}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
+          <div className="flex-1 space-y-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-emerald-500">
+              Create your own toys for Christmas
+            </p>
+            <div className="space-y-4 text-4xl font-semibold leading-tight text-neutral-900 md:text-5xl lg:text-6xl">
+              <p>Holiday toys that feel</p>
+              <ContainerTextFlip
+                words={["playful", "sustainable", "heartfelt", "limitless"]}
+                className="bg-white/80 text-neutral-900 dark:text-white"
+              />
             </div>
-            <div className="flex-1">
-              <div className="relative h-[420px] w-full">
-                <div className="absolute inset-0 rounded-[36px] bg-gradient-to-br from-emerald-200/50 via-white/60 to-slate-100 blur-2xl" />
-                <div className="relative h-full overflow-hidden rounded-[32px] border border-white/80 bg-white/70 p-3 shadow-2xl backdrop-blur">
-                  <div className="h-full w-full rounded-[28px] border border-white/40 bg-gradient-to-br from-slate-950/90 to-slate-700/80">
-                    <Canvas />
-                  </div>
-                  <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-gradient-to-t from-black/10 via-transparent" />
-                  
+            <p className="max-w-2xl text-base text-neutral-600 sm:text-lg">
+              PichaPrintAI lets kids at heart sketch a dream toy and
+              watch AI sculpt a 3D-printable model in minutes. Celebrate togetherness,
+              keep plastics in circulation, and surprise loved ones with toys born
+              from their own imagination.
+            </p>
+            <div className="flex flex-col gap-4 sm:flex-row">
+              <button
+                onClick={handleStartCustomization}
+                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-neutral-900 px-6 py-3 text-base font-semibold text-white transition hover:bg-neutral-800"
+              >
+                <IconUpload className="h-5 w-5" />
+                Upload a sketch
+              </button>
+
+            </div>
+            <dl className="grid gap-4 sm:grid-cols-3">
+              {heroStats.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="rounded-2xl border border-neutral-200 px-4 py-3 shadow-sm"
+                >
+                  <dt className="text-xs uppercase tracking-wide text-neutral-500">
+                    {stat.label}
+                  </dt>
+                  <dd className="text-2xl font-semibold text-neutral-900">
+                    {stat.value}
+                  </dd>
                 </div>
+              ))}
+            </dl>
+          </div>
+          <div className="flex-1">
+            <div className="relative h-[420px] w-full">
+              <div className="absolute inset-0 rounded-[36px] bg-gradient-to-br from-emerald-200/50 via-white/60 to-slate-100 blur-2xl" />
+              <div className="relative h-full overflow-hidden rounded-[32px] border border-white/80 bg-white/70 p-3 shadow-2xl backdrop-blur">
+                <div className="h-full w-full rounded-[28px] border border-white/40 bg-gradient-to-br from-slate-950/90 to-slate-700/80">
+                  <Canvas />
+                </div>
+                <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-gradient-to-t from-black/10 via-transparent" />
+
               </div>
             </div>
           </div>
+        </div>
       </section>
 
       <section
@@ -250,7 +241,7 @@ const Home = () => {
               <h2 className="text-3xl font-semibold text-neutral-900 sm:text-4xl">
                 A peek at toys the community dreamed up this week
               </h2>
-              
+
             </div>
             <a
               href="#book-demo"
@@ -269,23 +260,13 @@ const Home = () => {
                 <CardBody className="bg-white/90 relative group/card hover:shadow-2xl hover:shadow-emerald-500/[0.1] dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-neutral-100 !h-auto !w-full rounded-3xl border shadow-sm overflow-hidden transition-shadow duration-300">
                   <CardItem
                     translateZ="100"
-                    className={`${item.src.endsWith('.stl') ? 'h-80 md:h-96' : 'h-60'} w-full bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-t-3xl relative group-hover/card:shadow-xl`}
+                    className="h-60 w-full bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-t-3xl relative group-hover/card:shadow-xl"
                   >
-                    {item.src.endsWith('.stl') ? (
-                      <STLViewer
-                        url={item.src}
-                        color={item.color || "#EFBD48"}
-                        className="h-full w-full"
-                        autoRotate={true}
-                        zoom={3}
-                      />
-                    ) : (
-                      <img
-                        src={item.src}
-                        alt={item.title}
-                        className="h-full w-full object-cover rounded-t-3xl"
-                      />
-                    )}
+                    <img
+                      src={item.src}
+                      alt={item.title}
+                      className="h-full w-full object-contain rounded-t-3xl"
+                    />
                   </CardItem>
                   <div className="px-5 py-4 space-y-2">
                     <CardItem
@@ -310,22 +291,12 @@ const Home = () => {
                 key={`${item.title}-mobile`}
                 className="group rounded-3xl border border-neutral-100 bg-white/90 shadow-sm transition hover:-translate-y-1 hover:shadow-lg overflow-hidden md:hidden"
               >
-                <div className={`${item.src.endsWith('.stl') ? 'h-80' : 'h-60'} w-full bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-t-3xl relative`}>
-                  {item.src.endsWith('.stl') ? (
-                    <STLViewer
-                      url={item.src}
-                      color={item.color || "#EFBD48"}
-                      className="h-full w-full"
-                      autoRotate={true}
-                      zoom={3}
-                    />
-                  ) : (
-                    <img
-                      src={item.src}
-                      alt={item.title}
-                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                    />
-                  )}
+                <div className="h-60 w-full bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-t-3xl relative">
+                  <img
+                    src={item.src}
+                    alt={item.title}
+                    className="h-full w-full object-contain transition duration-500 group-hover:scale-105"
+                  />
                 </div>
                 <div className="space-y-2 px-5 py-4">
                   <h3 className="text-lg font-semibold text-neutral-900">
@@ -337,7 +308,7 @@ const Home = () => {
             ))}
           </div>
           <div className="mt-12 rounded-[28px] border border-neutral-100 bg-neutral-50/70">
-            <AnimatedTestimonials testimonials={makerStories} autoplay />
+            <AnimatedTestimonials testimonials={makerStories} />
           </div>
         </div>
       </section>
