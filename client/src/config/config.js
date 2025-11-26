@@ -1,11 +1,11 @@
 const defaults = {
   development: {
     dalleUrl: 'http://localhost:8080/api/v1/dalle',
-    triposgBaseUrl: 'https://39a3042b22c7.ngrok-free.app/',
+    triposgBaseUrl: 'https://e8f3505040ef.ngrok-free.app/',
   },
   production: {
     dalleUrl: 'https://devswag.onrender.com/api/v1/dalle',
-    triposgBaseUrl: 'https://39a3042b22c7.ngrok-free.app/',
+    triposgBaseUrl: 'https://e8f3505040ef.ngrok-free.app/',
   },
 };
 
@@ -17,5 +17,7 @@ const config = {
 };
 
 config.imageTo3dEndpoint = `${config.triposgBaseUrl.replace(/\/$/, '')}/image_upload`;
+config.scribbleUploadEndpoint = `${config.triposgBaseUrl.replace(/\/$/, '')}/upload`;
+config.bookingEndpoint = import.meta.env.VITE_BOOKING_API_URL;
 
 export default config;

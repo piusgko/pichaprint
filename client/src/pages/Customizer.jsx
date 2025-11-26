@@ -19,6 +19,7 @@ const Customizer = () => {
   const [generatingImg, setGeneratingImg] = useState(false);
   const [uploadingMesh, setUploadingMesh] = useState(false);
   const [generatedStlUrl, setGeneratedStlUrl] = useState(null);
+  const [description, setDescription] = useState('');
  
   const [activeEditorTab, setActiveEditorTab] = useState("");
   const [activeFilterTab, setActiveFilterTab] = useState({
@@ -122,12 +123,15 @@ const Customizer = () => {
     }
 
     const formData = new FormData();
-    formData.append('image_upload', file);
+    // Backend /upload expects file under key "image"
+    formData.append('image', file);
+    // Also send an optional natural-language description for sketch / intent.
+    formData.append('description', description || '');
 
     setUploadingMesh(true);
 
     try {
-      const response = await fetch(config.imageTo3dEndpoint, {
+      const response = await fetch(config.scribbleUploadEndpoint, {
         method: 'POST',
         body: formData,
       });
@@ -181,6 +185,8 @@ const Customizer = () => {
                 uploadImageTo3d={handleImageTo3dUpload}
                 isUploading={uploadingMesh}
                 generatedStlUrl={generatedStlUrl}
+                description={description}
+                setDescription={setDescription}
               />
             </div>
           </motion.div>
