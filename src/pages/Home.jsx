@@ -171,9 +171,7 @@ const Home = () => {
         </div>
         <div className="relative z-10 flex flex-col gap-12 lg:flex-row lg:items-center">
           <div className="flex-1 space-y-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-emerald-500">
-              Create your own toys for Christmas
-            </p>
+
             <div className="space-y-4 text-4xl font-semibold leading-tight text-neutral-900 md:text-5xl lg:text-6xl">
               <p>Holiday toys that feel</p>
               <ContainerTextFlip
