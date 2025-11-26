@@ -308,7 +308,7 @@ const Home = () => {
             ))}
           </div>
           <div className="mt-12 rounded-[28px] border border-neutral-100 bg-neutral-50/70">
-            <AnimatedTestimonials testimonials={makerStories} />
+            <AnimatedTestimonials testimonials={makerStories} autoplay />
           </div>
         </div>
       </section>
