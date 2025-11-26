@@ -18,6 +18,7 @@ const config = {
 
 config.imageTo3dEndpoint = `${config.triposgBaseUrl.replace(/\/$/, '')}/image_upload`;
 config.scribbleUploadEndpoint = `${config.triposgBaseUrl.replace(/\/$/, '')}/upload`;
-config.bookingEndpoint = import.meta.env.VITE_BOOKING_API_URL;
+config.bookingEndpoint =
+  import.meta.env.VITE_BOOKING_API_URL ?? "http://localhost:4000/api/book-demo";
 
 export default config;

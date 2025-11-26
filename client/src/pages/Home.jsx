@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import config from "../config/config";
 import {
   IconCalendarEvent,
   IconHome,
@@ -19,6 +18,7 @@ import { FloatingDock } from "@/components/ui/floating-dock";
 import STLViewer from "@/components/STLViewer";
 import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
 import { CardContainer, CardBody, CardItem } from "@/components/ui/3d-card";
+import BookingCard from "@/components/BookingCard";
 
 const heroStats = [
   { label: "Avg. STL turnaround", value: "24 hrs" },
@@ -69,19 +69,6 @@ const deliveryTimeline = [
     title: "Print & deliver",
     copy: "Eco filament gets printed, polished, and shipped in holiday-ready boxes.",
     icon: IconTruckDelivery,
-  },
-];
-
-const deliveryBenefits = [
-  {
-    title: "Santa-fast tracking",
-    copy: "Families get joyful SMS + email updates the moment toys leave our printers.",
-    icon: IconTruckDelivery,
-  },
-  {
-    title: "Family-first drop offs",
-    copy: "Couriers deliver gift-ready boxes with QR stories about each recycled toy.",
-    icon: IconHome,
   },
 ];
 
@@ -150,7 +137,7 @@ const navItems = [
   },
   {
     name: "Delivery",
-    link: "#delivery",
+    link: "#book-demo",
     icon: (
       <IconTruckDelivery className="h-4 w-4 text-neutral-500 dark:text-white" />
     ),
@@ -167,61 +154,6 @@ const navItems = [
 const Home = () => {
   const handleStartCustomization = () => {
     state.intro = false;
-  };
-
-  const [bookingName, setBookingName] = React.useState("");
-  const [bookingEmail, setBookingEmail] = React.useState("");
-  const [bookingDate, setBookingDate] = React.useState("");
-  const [bookingTime, setBookingTime] = React.useState("");
-  const [bookingMessage, setBookingMessage] = React.useState("");
-  const [bookingStatus, setBookingStatus] = React.useState(null);
-  const [bookingLoading, setBookingLoading] = React.useState(false);
-
-  const handleBookingSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!bookingEmail || !bookingDate || !bookingTime) {
-      setBookingStatus({ type: "error", message: "Email, date, and time are required." });
-      return;
-    }
-
-    try {
-      setBookingLoading(true);
-      setBookingStatus(null);
-
-      const res = await fetch(config.bookingEndpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: bookingName,
-          email: bookingEmail,
-          date: bookingDate,
-          time: bookingTime,
-          message: bookingMessage,
-        }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Booking failed. Please try again.");
-      }
-
-      setBookingStatus({
-        type: "success",
-        message: "Booking request sent via server. We'll email you back soon.",
-      });
-      setBookingName("");
-      setBookingEmail("");
-      setBookingDate("");
-      setBookingTime("");
-      setBookingMessage("");
-    } catch (err) {
-      setBookingStatus({ type: "error", message: err.message });
-    } finally {
-      setBookingLoading(false);
-    }
   };
 
   return (
@@ -456,7 +388,7 @@ const Home = () => {
       </section>
 
       <section
-        id="delivery"
+        id="book-demo"
         className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8"
       >
         <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-xl">
@@ -501,154 +433,13 @@ const Home = () => {
                 );
               })}
             </ol>
-            <div className="space-y-6 rounded-[28px] border border-neutral-200 bg-neutral-900 p-6 text-white">
-              {deliveryBenefits.map((benefit) => {
-                const Icon = benefit.icon;
-                return (
-                  <article
-                    key={benefit.title}
-                    className="rounded-3xl border border-white/20 bg-white/5 p-5"
-                  >
-                    <Icon className="mb-4 h-7 w-7 text-emerald-300" />
-                    <h3 className="text-xl font-semibold">{benefit.title}</h3>
-                    <p className="mt-2 text-sm text-white/80">{benefit.copy}</p>
-                  </article>
-                );
-              })}
-              <div className="rounded-3xl border border-white/20 bg-white/10 p-5">
-                <p className="text-sm uppercase tracking-[0.3em] text-white/80">
-                  Need studio help?
-                </p>
-                <p className="mt-3 text-lg font-semibold">
-                  Add bedtime-story QR codes, recycled filament refills, or winter
-                  workshop livestreams—our team wraps it all.
-                </p>
-              </div>
+            <div className="flex items-center justify-center">
+              <BookingCard />
             </div>
           </div>
         </div>
       </section>
 
-      <section
-        id="book-demo"
-        className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8"
-      >
-        <div className="rounded-[32px] bg-neutral-900 p-8 text-white">
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
-            <div className="flex-1 space-y-3">
-              <p className="text-sm uppercase tracking-[0.3em] text-white/70">
-                Christmas campaign studio
-              </p>
-              <h3 className="text-2xl font-semibold">
-                Reserve GPU time for your upload session.
-              </h3>
-              <p className="text-white/80 text-sm sm:text-base">
-                Share when you&apos;d like to start generating STLs and we&apos;ll make sure
-                GPU capacity is ready. You&apos;ll get a confirmation email from us.
-              </p>
-            </div>
-            <div className="flex-1 mt-4 lg:mt-0">
-              <form
-                onSubmit={handleBookingSubmit}
-                className="space-y-4 rounded-2xl border border-white/15 bg-white/5 p-4 sm:p-5 shadow-lg"
-              >
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-xs font-medium text-white/80">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      value={bookingName}
-                      onChange={(e) => setBookingName(e.target.value)}
-                      className="w-full rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400"
-                      placeholder="Optional"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-xs font-medium text-white/80">
-                      Email (where we&apos;ll confirm)
-                    </label>
-                    <input
-                      type="email"
-                      value={bookingEmail}
-                      onChange={(e) => setBookingEmail(e.target.value)}
-                      required
-                      className="w-full rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400"
-                      placeholder="you@example.com"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-xs font-medium text-white/80">
-                      Preferred date
-                    </label>
-                    <input
-                      type="date"
-                      value={bookingDate}
-                      onChange={(e) => setBookingDate(e.target.value)}
-                      required
-                      className="w-full rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-xs font-medium text-white/80">
-                      Preferred time
-                    </label>
-                    <input
-                      type="time"
-                      value={bookingTime}
-                      onChange={(e) => setBookingTime(e.target.value)}
-                      required
-                      className="w-full rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-white/80">
-                    What are you planning to upload?
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={bookingMessage}
-                    onChange={(e) => setBookingMessage(e.target.value)}
-                    className="w-full resize-none rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400"
-                    placeholder="E.g. 10 hand-drawn toy sketches for classroom project"
-                  />
-                </div>
-                {bookingStatus && (
-                  <p
-                    className={
-                      bookingStatus.type === "success"
-                        ? "text-xs text-emerald-300"
-                        : "text-xs text-rose-300"
-                    }
-                  >
-                    {bookingStatus.message}
-                  </p>
-                )}
-                <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <button
-                    type="submit"
-                    disabled={bookingLoading}
-                    className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-2.5 text-sm font-semibold text-neutral-900 transition hover:bg-slate-100 disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    <IconCalendarEvent className="h-5 w-5" />
-                    {bookingLoading ? "Sending…" : "Send booking request"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleStartCustomization}
-                    className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/30 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
-                  >
-                    <IconUpload className="h-5 w-5" />
-                    Start sculpting now
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };
