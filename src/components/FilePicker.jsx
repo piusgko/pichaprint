@@ -1,13 +1,14 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 
 import CustomButton from './CustomButton';
 import { FileUpload } from './ui/file-upload';
 import { HoverBorderGradient } from './ui/hover-border-gradient';
 
-const FilePicker = ({ file, setFile, readFile, uploadImageTo3d, isUploading, generatedStlUrl, description, setDescription }) => {
+const FilePicker = ({ file, setFile, readFile, uploadImageTo3d, isUploading, generatedStlUrl }) => {
   const hasFile = !!file;
   const hasGeneratedStl = !!generatedStlUrl;
   const isImageFile = hasFile && file.type?.startsWith('image/');
+  const [imagePreview, setImagePreview] = useState(null);
 
   const fileDetails = useMemo(() => {
     if (!file) return null;
@@ -32,6 +33,19 @@ const FilePicker = ({ file, setFile, readFile, uploadImageTo3d, isUploading, gen
     link.remove();
   };
 
+  // Generate image preview when file changes
+  useEffect(() => {
+    if (file && isImageFile) {
+      const objectUrl = URL.createObjectURL(file);
+      setImagePreview(objectUrl);
+      return () => {
+        URL.revokeObjectURL(objectUrl);
+      };
+    } else {
+      setImagePreview(null);
+    }
+  }, [file, isImageFile]);
+
   useEffect(() => {
     return () => {
       if (generatedStlUrl) {
@@ -54,20 +68,15 @@ const FilePicker = ({ file, setFile, readFile, uploadImageTo3d, isUploading, gen
         accept="image/*,.stl"
         footer={
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="w-full sm:w-2/3 text-xs text-neutral-500 space-y-1">
-              <label className="block text-left">
-                <span className="mb-1 block text-[11px] font-semibold text-neutral-700">
-                  Describe your toy (optional)
-                </span>
-                <textarea
-                  rows={3}
-                  value={description}
-                  onChange={(e) => setDescription?.(e.target.value)}
-                  placeholder="E.g. Smiling robot dog with rocket backpack, low-detail for a 6-year-old."
-                  className="w-full resize-none rounded-lg border border-neutral-200 px-2 py-1 text-xs text-neutral-800 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400"
+            {imagePreview && (
+              <div className="w-full sm:w-2/3">
+                <img
+                  src={imagePreview}
+                  alt="Uploaded preview"
+                  className="max-w-full h-auto rounded-lg border border-neutral-200 shadow-sm max-h-48 object-contain"
                 />
-              </label>
-            </div>
+              </div>
+            )}
             <div className="flex flex-wrap gap-2 sm:justify-end sm:w-1/3">
               {hasGeneratedStl && (
                 <CustomButton
@@ -88,8 +97,8 @@ const FilePicker = ({ file, setFile, readFile, uploadImageTo3d, isUploading, gen
                 {isUploading
                   ? 'Generating…'
                   : hasGeneratedStl
-                  ? 'Regenerate STL'
-                  : 'Convert'}
+                    ? 'Regenerate STL'
+                    : 'Convert'}
               </HoverBorderGradient>
             </div>
           </div>

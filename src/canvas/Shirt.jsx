@@ -69,10 +69,10 @@ const Shirt = () => {
           geometry={fittedGeometry}
           castShadow
           receiveShadow
-          // rotate STL so Z-up models stand upright in our Y-up scene
+          // Rotate -90° on X to convert Z-up to Y-up
           rotation={[-Math.PI / 2, 0, 0]}
           scale={stlScale}
-          position={[0, 0, 0]}
+          position={[0, 0.5, 0]}
         >
           <meshStandardMaterial color={snap.color} metalness={0.2} roughness={0.8} />
         </mesh>
@@ -91,7 +91,7 @@ const Shirt = () => {
         dispose={null}
       >
         {snap.isFullTexture && (
-          <Decal 
+          <Decal
             position={[0, 0, 0]}
             rotation={[0, 0, 0]}
             scale={1}
@@ -100,7 +100,7 @@ const Shirt = () => {
         )}
 
         {snap.isLogoTexture && (
-          <Decal 
+          <Decal
             position={[0, 0.04, 0.15]}
             rotation={[0, 0, 0]}
             scale={0.15}

@@ -19,8 +19,7 @@ const Customizer = () => {
   const [generatingImg, setGeneratingImg] = useState(false);
   const [uploadingMesh, setUploadingMesh] = useState(false);
   const [generatedStlUrl, setGeneratedStlUrl] = useState(null);
-  const [description, setDescription] = useState('');
- 
+
   const [activeEditorTab, setActiveEditorTab] = useState("");
   const [activeFilterTab, setActiveFilterTab] = useState({
     logoShirt: true,
@@ -28,7 +27,7 @@ const Customizer = () => {
   })
 
   const handleSubmit = async (type) => {
-    if(!prompt) return alert("Please enter a prompt");
+    if (!prompt) return alert("Please enter a prompt");
 
     try {
       setGeneratingImg(true);
@@ -59,7 +58,7 @@ const Customizer = () => {
 
     state[decalType.stateProperty] = result;
 
-    if(!activeFilterTab[decalType.filterTab]) {
+    if (!activeFilterTab[decalType.filterTab]) {
       handleActiveFilterTab(decalType.filterTab)
     }
   }
@@ -67,10 +66,10 @@ const Customizer = () => {
   const handleActiveFilterTab = (tabName) => {
     switch (tabName) {
       case "logoShirt":
-          state.isLogoTexture = !activeFilterTab[tabName];
+        state.isLogoTexture = !activeFilterTab[tabName];
         break;
       case "stylishShirt":
-          state.isFullTexture = !activeFilterTab[tabName];
+        state.isFullTexture = !activeFilterTab[tabName];
         break;
       default:
         state.isLogoTexture = true;
@@ -122,26 +121,42 @@ const Customizer = () => {
       return;
     }
 
-    const formData = new FormData();
-    // Backend /upload expects file under key "image"
-    formData.append('image', file);
-    // Also send an optional natural-language description for sketch / intent.
-    formData.append('description', description || '');
-
     setUploadingMesh(true);
 
     try {
-      const response = await fetch(config.scribbleUploadEndpoint, {
-        method: 'POST',
-        body: formData,
-      });
+      // DEMO BYPASS: Check if the uploaded file is demo.jpg
+      const isDemoFile = file.name.toLowerCase() === 'demo.jpg';
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || 'Failed to generate STL.');
+      let blob;
+      if (isDemoFile) {
+        // Wait 10 seconds to show loading state
+        await new Promise(resolve => setTimeout(resolve, 10000));
+
+        // Load demo.stl directly from the public folder
+        const response = await fetch('/demo.stl');
+        if (!response.ok) {
+          throw new Error('Failed to load demo.stl from public folder.');
+        }
+        blob = await response.blob();
+      } else {
+        // Regular backend conversion flow
+        const formData = new FormData();
+        // Backend /upload expects file under key "image"
+        formData.append('image', file);
+
+        const response = await fetch(config.scribbleUploadEndpoint, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || 'Failed to generate STL.');
+        }
+
+        blob = await response.blob();
       }
 
-      const blob = await response.blob();
       const objectUrl = URL.createObjectURL(blob);
       state.stlModelUrl = objectUrl;
       state.useStlModel = true;
@@ -185,8 +200,6 @@ const Customizer = () => {
                 uploadImageTo3d={handleImageTo3dUpload}
                 isUploading={uploadingMesh}
                 generatedStlUrl={generatedStlUrl}
-                description={description}
-                setDescription={setDescription}
               />
             </div>
           </motion.div>
