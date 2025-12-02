@@ -57,11 +57,11 @@ export const FileUpload = ({
   });
 
   return (
-    <div className="w-full" {...getRootProps()}>
+    <div className="w-full mb-18" {...getRootProps()}>
       <motion.div
         onClick={handleClick}
         whileHover="animate"
-        className="p-4 sm:p-6 group/file block rounded-2xl cursor-pointer w-full relative overflow-hidden bg-white/90 dark:bg-neutral-950 shadow-sm"
+        className="p-2 sm:p-3 group/file block rounded-2xl cursor-pointer w-full relative overflow-hidden bg-white/90 dark:bg-neutral-950 shadow-sm"
       >
         <input
           ref={fileInputRef}
@@ -76,40 +76,17 @@ export const FileUpload = ({
           <GridPattern />
         </div>
 
-        <div className="relative z-20 flex flex-col items-center justify-center text-center gap-1">
+        <div className="relative z-20 flex flex-col items-center justify-center text-center gap-0.5">
           <p className="font-sans font-semibold text-neutral-700 dark:text-neutral-100 text-sm sm:text-base">
             Upload file
           </p>
           <p className="font-sans text-neutral-500 dark:text-neutral-400 text-xs sm:text-sm max-w-xs">
-            Drag & drop STL, PNG, or JPEG here, or tap to browse.
+            Drag Your Image here, or tap to browse.
           </p>
         </div>
 
-        <div className="relative w-full mt-6 space-y-3">
-          {files.length > 0 &&
-            files.map((file, idx) => (
-              <motion.div
-                key={"file" + idx}
-                layoutId={idx === 0 ? "file-upload" : "file-upload-" + idx}
-                className={cn(
-                  "relative overflow-hidden z-40 bg-white dark:bg-neutral-900 flex flex-col items-start justify-start p-3 sm:p-4 w-full rounded-xl",
-                  "shadow-[0px_10px_30px_rgba(0,0,0,0.05)]"
-                )}
-              >
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-1.5">
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    layout
-                    className="text-sm sm:text-base text-neutral-700 dark:text-neutral-200 truncate"
-                  >
-                    {file.name}
-                  </motion.p>
-                
-                </div>
-               
-              </motion.div>
-            ))}
+        <div className="relative w-full mt-3 space-y-2">
+
 
           {!files.length && (
             <motion.div
@@ -121,7 +98,7 @@ export const FileUpload = ({
                 damping: 20,
               }}
               className={cn(
-                "relative group-hover/file:shadow-xl z-40 bg-white dark:bg-neutral-900 flex items-center justify-center h-20 sm:h-28 mt-2 w-full rounded-2xl",
+                "relative group-hover/file:shadow-xl z-40 bg-white dark:bg-neutral-900 flex items-center justify-center h-12 sm:h-14 mt-1 w-full rounded-2xl",
                 "shadow-[0px_10px_30px_rgba(0,0,0,0.08)]"
               )}
             >
@@ -143,7 +120,7 @@ export const FileUpload = ({
           {!files.length && (
             <motion.div
               variants={secondaryVariant}
-              className="absolute opacity-0 border border-dashed border-sky-400 inset-0 z-30 bg-transparent flex items-center justify-center h-20 sm:h-28 mt-2 w-full rounded-2xl"
+              className="absolute opacity-0 border border-dashed border-sky-400 inset-0 z-30 bg-transparent flex items-center justify-center h-12 sm:h-14 mt-1 w-full rounded-2xl"
             />
           )}
         </div>
@@ -177,11 +154,10 @@ export function GridPattern() {
           return (
             <div
               key={`${col}-${row}`}
-              className={`w-4 sm:w-8 h-4 sm:h-8 flex shrink-0 rounded-[2px] ${
-                index % 2 === 0
-                  ? "bg-gray-50 dark:bg-neutral-950"
-                  : "bg-gray-50 dark:bg-neutral-950 shadow-[0px_0px_1px_3px_rgba(255,255,255,1)_inset] dark:shadow-[0px_0px_1px_3px_rgba(0,0,0,1)_inset]"
-              }`}
+              className={`w-4 sm:w-8 h-4 sm:h-8 flex shrink-0 rounded-[2px] ${index % 2 === 0
+                ? "bg-gray-50 dark:bg-neutral-950"
+                : "bg-gray-50 dark:bg-neutral-950 shadow-[0px_0px_1px_3px_rgba(255,255,255,1)_inset] dark:shadow-[0px_0px_1px_3px_rgba(0,0,0,1)_inset]"
+                }`}
             />
           );
         })

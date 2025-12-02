@@ -14,13 +14,13 @@ const Customizer = () => {
   const snap = useSnapshot(state);
 
   const [file, setFile] = useState('');
+  const [description, setDescription] = useState('');
 
   const [prompt, setPrompt] = useState('');
   const [generatingImg, setGeneratingImg] = useState(false);
   const [uploadingMesh, setUploadingMesh] = useState(false);
   const [generatedStlUrl, setGeneratedStlUrl] = useState(null);
-  const [description, setDescription] = useState('');
- 
+
   const [activeEditorTab, setActiveEditorTab] = useState("");
   const [activeFilterTab, setActiveFilterTab] = useState({
     logoShirt: true,
@@ -28,7 +28,7 @@ const Customizer = () => {
   })
 
   const handleSubmit = async (type) => {
-    if(!prompt) return alert("Please enter a prompt");
+    if (!prompt) return alert("Please enter a prompt");
 
     try {
       setGeneratingImg(true);
@@ -59,7 +59,7 @@ const Customizer = () => {
 
     state[decalType.stateProperty] = result;
 
-    if(!activeFilterTab[decalType.filterTab]) {
+    if (!activeFilterTab[decalType.filterTab]) {
       handleActiveFilterTab(decalType.filterTab)
     }
   }
@@ -67,10 +67,10 @@ const Customizer = () => {
   const handleActiveFilterTab = (tabName) => {
     switch (tabName) {
       case "logoShirt":
-          state.isLogoTexture = !activeFilterTab[tabName];
+        state.isLogoTexture = !activeFilterTab[tabName];
         break;
       case "stylishShirt":
-          state.isFullTexture = !activeFilterTab[tabName];
+        state.isFullTexture = !activeFilterTab[tabName];
         break;
       default:
         state.isLogoTexture = true;
@@ -122,26 +122,37 @@ const Customizer = () => {
       return;
     }
 
-    const formData = new FormData();
-    // Backend /upload expects file under key "image"
-    formData.append('image', file);
-    // Also send an optional natural-language description for sketch / intent.
-    formData.append('description', description || '');
-
     setUploadingMesh(true);
 
     try {
+      // Backend conversion flow
+      const formData = new FormData();
+      // Backend expects 'image' file and 'description' form field
+      formData.append('image_upload', file);
+      formData.append('description', description || 'Convert this image to a 3D model');
+
+      console.log('Uploading to:', config.scribbleUploadEndpoint);
+      console.log('File:', file.name, file.type, file.size);
+
       const response = await fetch(config.scribbleUploadEndpoint, {
         method: 'POST',
+        headers: {
+          // Required for ngrok to bypass browser warning
+          'ngrok-skip-browser-warning': 'true',
+        },
         body: formData,
       });
 
+      console.log('Response status:', response.status);
+
       if (!response.ok) {
         const errorText = await response.text();
+        console.error('Backend error:', errorText);
         throw new Error(errorText || 'Failed to generate STL.');
       }
 
       const blob = await response.blob();
+
       const objectUrl = URL.createObjectURL(blob);
       state.stlModelUrl = objectUrl;
       state.useStlModel = true;

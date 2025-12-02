@@ -9,8 +9,8 @@ const CanvasModel = () => {
   return (
     <Canvas
       shadows
-      // place the camera in front of the model so we are not inside it
-      camera={{ position: [0, 0, 2], fov: 25 }}
+      // Camera positioned for front-facing view of STL models at eye level
+      camera={{ position: [0, 1.5, 3], fov: 25 }}
       gl={{ preserveDrawingBuffer: true }}
       className="w-full max-w-full h-full transition-all ease-in"
     >
@@ -26,6 +26,10 @@ const CanvasModel = () => {
         rotateSpeed={1}
         enableDamping={true}
         dampingFactor={0.05}
+        // Better initial viewing angle for STL models
+        target={[0, 0, 0]}
+        minDistance={0.5}
+        maxDistance={10}
       />
 
       <CameraRig>
